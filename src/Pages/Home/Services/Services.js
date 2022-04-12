@@ -14,7 +14,7 @@ const Services = () => {
 
 
     return (
-        <div>
+        <div id='services'>
             <h1 className='services-title mt-5'>Our Services</h1>
                 <div className="services-container">
                     {
