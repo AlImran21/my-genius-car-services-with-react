@@ -1,25 +1,43 @@
 import React, { useRef } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useLocation, useNavigate } from 'react-router-dom';
+import auth from '../../../firebase.init';
 import './Login.css'
 
 const Login = () => {
-    const emailRef = useRef ('');
-    const passwordRef = useRef ('');
-    const navigate = useNavigate ();
+    const location = useLocation();
+    let from = location.state?.from?.pathname || "/";
+
+    const [
+        signInWithEmailAndPassword,
+        user,
+        loading,
+        error,
+    ] = useSignInWithEmailAndPassword(auth);
+
+    const emailRef = useRef('');
+    const passwordRef = useRef('');
+    const navigate = useNavigate();
+
+    if (user) {
+        navigate(from, { replace: true });
+    }
 
     const handleSubmit = (event) => {
-        event.preventDefault ();
+        event.preventDefault();
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
 
-        console.log (email, password);
+        signInWithEmailAndPassword(email, password)
+
+        // console.log(email, password);
     }
 
     const navigateRegister = (event) => {
-        navigate ('/register');
+        navigate('/register');
 
-    } 
+    }
 
 
     return (
@@ -47,7 +65,7 @@ const Login = () => {
                         Submit
                     </Button>
                 </Form>
-                <p style={{cursor: 'pointer'}} className='mt-2'>New to genius car? <span onClick={navigateRegister} className='text-danger'>Please Register</span></p>
+                <p style={{ cursor: 'pointer' }} className='mt-2'>New to genius car? <span onClick={navigateRegister} className='text-danger'>Please Register</span></p>
             </div>
         </div>
     );

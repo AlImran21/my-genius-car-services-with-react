@@ -1,33 +1,65 @@
-import React, { useRef } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import auth from '../../../firebase.init';
+import './Register.css'
+
 
 const Register = () => {
-    const nameRef = useRef ('');
-    const emailRef = useRef ('');
-    const passwordRef = useRef ();
+    const [
+        createUserWithEmailAndPassword,
+        user,
+        loading,
+        error,
+      ] = useCreateUserWithEmailAndPassword(auth);
 
     const navigate = useNavigate();
 
-    const navigateLogin = (event) => {
+    const navigateLogin = () => {
         navigate('/login');
 
     }
 
+    if (user) {
+        navigate ('/');
+    }
+
 
     const handleRegister = (event) => {
-        event.preventDefault ();
-        const name = nameRef.current.value;
-        const email = emailRef.current.value;
-        const password = passwordRef.current.value;
-        console.log (name, email, password);
+        event.preventDefault();
+        const name = event.target.name.value;
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+
+        createUserWithEmailAndPassword(email, password);
+
 
     }
 
     return (
         <div className='form-alignment mt-5'>
             <h2 className='text-center mt-5 mb-5'>Register</h2>
-            <Form onSubmit={handleRegister}>
+            <form className='form-style' onSubmit={handleRegister}>
+                <label htmlFor="name">Your Name</label>
+                <input type="text" name="name" id="" placeholder='Enter Name' required />
+                <br /><br />
+                <label htmlFor="email">Email Address</label>
+                <input type="email" name="email" id="" placeholder='Enter Email' required />
+                <br /><br />
+                <label htmlFor="password">Password</label>
+                <input type="password" name="password" id="" placeholder='Enter Password' required />
+                <br /><br />
+                <input type="submit" value="Register" />
+            </form>
+            <p style={{ cursor: 'pointer' }} className='mt-2'>Already have an account? <span onClick={navigateLogin} className='text-success'>Login</span></p>
+        </div>
+    );
+};
+
+export default Register;
+
+/* 
+ <Form onSubmit={handleRegister}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Your Name</Form.Label>
                     <Form.Control ref={nameRef} type="text" placeholder="Enter Name" required />
@@ -54,9 +86,4 @@ const Register = () => {
                     Register
                 </Button>
             </Form>
-            <p style={{ cursor: 'pointer' }} className='mt-2'>Already have an account? <span onClick={navigateLogin} className='text-success'>Login</span></p>
-        </div>
-    );
-};
-
-export default Register;
+*/
