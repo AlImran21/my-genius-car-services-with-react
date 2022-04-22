@@ -9,6 +9,7 @@ import SocialLogin from '../SocialLogin/SocialLogin';
 import './Login.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PageTitle from '../../Shared/PageTitle/PageTitle';
 
 const Login = () => {
     const location = useLocation();
@@ -75,6 +76,9 @@ const Login = () => {
         <div>
 
             <div className='form-alignment mt-5'>
+                <PageTitle
+                    title="Login">
+                </PageTitle>
                 <h2 className='text-center mt-5 mb-5'>Login</h2>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
