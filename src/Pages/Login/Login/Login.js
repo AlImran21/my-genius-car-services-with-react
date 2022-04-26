@@ -7,9 +7,10 @@ import auth from '../../../firebase.init';
 import Loading from '../../Shared/Loading/Loading';
 import SocialLogin from '../SocialLogin/SocialLogin';
 import './Login.css'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PageTitle from '../../Shared/PageTitle/PageTitle';
+import axios from 'axios';
 
 const Login = () => {
     const location = useLocation();
@@ -32,15 +33,19 @@ const Login = () => {
     }
 
     if (user) {
-        navigate(from, { replace: true });
+        // navigate(from, { replace: true });
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
 
-        signInWithEmailAndPassword(email, password)
+        await signInWithEmailAndPassword(email, password)
+        const { data } = await axios.post("http://localhost:5000/login", { email });
+        console.log(data);
+        localStorage.setItem("accessToken", data.accessToken);
+        navigate(from, { replace: true });
 
         // console.log(email, password);
     }
@@ -98,7 +103,6 @@ const Login = () => {
                 <p style={{ cursor: 'pointer' }} className='mt-2'>Forget Password? <span onClick={resetPassword} className='text-info'>Reset Password</span></p>
 
                 <SocialLogin></SocialLogin>
-                <ToastContainer />
             </div>
         </div>
     );
